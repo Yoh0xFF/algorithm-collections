@@ -25,8 +25,7 @@ test case
 5 5
 */
 
-class Graph
-{
+class Graph {
 private:
 	int n, m, dfs_timer;
 	vector< vector<int> > graph;

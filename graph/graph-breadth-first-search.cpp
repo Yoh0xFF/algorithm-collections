@@ -27,8 +27,7 @@ test case
 5 6
 */
 
-class Graph
-{
+class Graph {
 private:
 	int n, m;
 	vector< vector<int> > graph;
