@@ -7,7 +7,7 @@
 using namespace std;
 
 /*
-mushaobis dro: O(n + m)
+O(n + m)
 n - number of vertex
 m - number of edges
 */
@@ -84,7 +84,7 @@ void Graph::read_graph() {
 		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
-		graph[y].push_back(x);	
+		graph[y].push_back(x); // for undirected graphs
 	}
 
 	cout << endl;

@@ -10,34 +10,40 @@ using namespace std;
 O(n + m)
 n - number of vertex
 m - number of edges
+
+Connected is usually associated with undirected graphs (two way edges): there is a path between every two nodes.
+
+Strongly connected is usually associated with directed graphs (one way edges): there is a route between every two nodes.
 */
 
 /*
 test case
-7 8
+10 9
 0 1
-0 3
-1 4
-4 3
-2 4
-2 5
-2 6
-5 6
+0 5
+1 5
+1 6
+2 3
+2 7
+3 8
+7 8
+4 9
 */
 
 class Graph {
 private:
 	int n, m;
 	vector< vector<int> > graph;
-	vector<int> t_sort;
+	vector< vector<int> > components;
+	vector<int> component;
 	vector<bool> used;
 
 	void dfs_visit(int v);
 public:
 	Graph();
 	void read_graph();
-	void topological_sort();
-	void print_topological_sort();
+	void search_components();
+	void print_components();
 };
 
 Graph::Graph(): n(0), m(0) {}
@@ -56,7 +62,7 @@ void Graph::read_graph() {
 		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
-		// graph[y].push_back(x); // for undirected graphs
+		graph[y].push_back(x); // for undirected graphs
 	}
 
 	cout << endl;
@@ -64,28 +70,33 @@ void Graph::read_graph() {
 }
 
 void Graph::dfs_visit(int v) {
-	used[v] = true;	
+	used[v] = true;
+	component.push_back(v);	
 	for (int i = 0; i < graph[v].size(); ++i) {
 		int u = graph[v][i];
 		if (!used[u]) {
 			dfs_visit(u);
 		}
 	}
-	t_sort.push_back(v);
 }
 
-void Graph::topological_sort() {
+void Graph::search_components() {
 	for (int i = 0; i < n; ++i) {
 		if (!used[i]) {
+			component.clear();
 			dfs_visit(i);
+			components.push_back(component);
 		}
 	}
-	reverse(t_sort.begin(), t_sort.end());
 }
 
-void Graph::print_topological_sort() {
-	for (int i = 0; i < t_sort.size(); ++i) {
-		cout << t_sort[i] << ' ';
+void Graph::print_components() {
+	for (int i = 0; i < components.size(); ++i) {
+		cout << "Component #" << (i + 1) << ": ";
+		for (int j = 0; j < components[i].size(); ++j) {
+			cout << components[i][j] << ' ';
+		}
+		cout << endl << endl;
 	}
 	cout << endl;
 }
@@ -93,7 +104,7 @@ void Graph::print_topological_sort() {
 int main(int argc, char const *argv[]) {
 	Graph g;
 	g.read_graph();
-	g.topological_sort();
-	g.print_topological_sort();
+	g.search_components();
+	g.print_components();
 	return 0;
 }
