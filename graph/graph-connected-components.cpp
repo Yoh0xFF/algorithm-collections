@@ -93,9 +93,12 @@ void Graph::search_components()
 	{
 		if (!used[i]) 
 		{
-			component.clear();
 			dfs_visit(i);
-			components.push_back(component);
+			if (!component.empty()) 
+			{
+				components.push_back(component);
+				component.clear();	
+			}
 		}
 	}
 }
