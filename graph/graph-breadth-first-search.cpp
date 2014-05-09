@@ -27,7 +27,8 @@ test case
 5 6
 */
 
-class Graph {
+class Graph 
+{
 private:
 	int n, m;
 	vector< vector<int> > graph;
@@ -45,10 +46,12 @@ public:
 
 Graph::Graph(): n(0), m(0) {}
 
-void Graph::debug() {
+void Graph::debug() 
+{
 	cout << "--- queue" << endl;
 	queue<int> tmp_q = q;
-	while (!tmp_q.empty()) {
+	while (!tmp_q.empty()) 
+	{
 		cout << tmp_q.front() << ' ';
 		tmp_q.pop();
 	}
@@ -69,18 +72,17 @@ void Graph::debug() {
 	getchar();
 }
 
-void Graph::read_graph() {
+void Graph::read_graph() 
+{
 	cin >> n >> m;
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < m; ++i) 
+	{
 		vector<int> tmp;
 		graph.push_back(tmp);
 	}
 
-	used.resize(n);
-	distance.resize(n);
-	parent.resize(n);
-
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < m; ++i) 
+	{
 		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
@@ -91,19 +93,27 @@ void Graph::read_graph() {
 	getchar();	
 }
 
-void Graph::bfs(int s) {
+void Graph::bfs(int s) 
+{
+	used.assign(n, false);
+	distance.assign(n, 0);
+	parent.assign(n, 0);
+
 	q.push(s);
 	used[s] = true;
 	parent[s] = -1;
 
-	while (!q.empty()) {
+	while (!q.empty()) 
+	{
 		debug();
 		
 		int v = q.front();
 		q.pop();
-		for (size_t i = 0; i < graph[v].size(); ++i) {
+		for (size_t i = 0; i < graph[v].size(); ++i) 
+		{
 			int to = graph[v][i];
-			if (!used[to]) {
+			if (!used[to]) 
+			{
 				q.push(to);
 				used[to] = true;
 				distance[to] = distance[v] + 1;
@@ -113,17 +123,23 @@ void Graph::bfs(int s) {
 	}
 }
 
-void Graph::print_shortest_path(int to) {
-	if (!used[to]) {
+void Graph::print_shortest_path(int to) 
+{
+	if (!used[to]) 
+	{
 		cout << "No path \n";
-	} else {
+	} else 
+	{
 		vector<int> path;
-		for (int v = to; v != -1; v = parent[v]) {
+		for (int v = to; v != -1; v = parent[v]) 
+		{
 			path.push_back(v);
 		}
 		reverse(path.begin(), path.end());
-		for (size_t i = 0; i < path.size(); ++i) {
-			if (i > 0) {
+		for (size_t i = 0; i < path.size(); ++i) 
+		{
+			if (i > 0) 
+			{
 				cout << ',';
 			}
 			cout << path[i];
@@ -132,7 +148,8 @@ void Graph::print_shortest_path(int to) {
 	}
 }
 
-int main() {
+int main() 
+{
 	Graph g;
 	g.read_graph();
 	g.bfs(0);

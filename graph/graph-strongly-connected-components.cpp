@@ -1,8 +1,6 @@
 #include <iostream>
-#include <queue>
 #include <vector>
 #include <cstdio>
-#include <algorithm>
 
 using namespace std;
 
@@ -18,30 +16,36 @@ Strongly connected is usually associated with directed graphs (one way edges): t
 
 /*
 test case
-10 9
+8 14
 0 1
-0 5
+1 2
 1 5
-1 6
+1 4
 2 3
-2 7
-3 8
-7 8
-4 9
+2 6
+3 2
+3 7
+4 0
+4 5
+5 6
+6 5
+6 7
+7 7
 */
 
-class Graph 
+class Graph
 {
 private:
 	int n, m;
-	vector< vector<int> > graph;
-	vector< vector<int> > components;
-	vector<int> component;
+	vector< vector<int> > graph, graph_t, components;
+	vector<int> order, component;
 	vector<bool> used;
 
-	void dfs_visit(int v);
+	void dfs_visit_1(int v);
+	void dfs_visit_2(int v);
 public:
 	Graph();
+
 	void read_graph();
 	void search_components();
 	void print_components();
@@ -49,16 +53,30 @@ public:
 
 Graph::Graph(): n(0), m(0) {}
 
-void Graph::dfs_visit(int v) 
+void Graph::dfs_visit_1(int v) 
 {
 	used[v] = true;
-	component.push_back(v);	
-	for (int i = 0; i < graph[v].size(); ++i) 
+	for (int i = 0; i < graph[v].size(); ++i)
 	{
-		int u = graph[v][i];
-		if (!used[u]) 
+		int to = graph[v][i];
+		if (!used[to]) 
 		{
-			dfs_visit(u);
+			dfs_visit_1(to);
+		}
+	}
+	order.push_back(v);
+}
+
+void Graph::dfs_visit_2(int v) 
+{
+	used[v] = true;
+	component.push_back(v);
+	for (int i = 0; i < graph_t[v].size(); ++i)
+	{
+		int to = graph_t[v][i];
+		if (!used[to]) 
+		{
+			dfs_visit_2(to);
 		}
 	}
 }
@@ -71,6 +89,7 @@ void Graph::read_graph()
 	{
 		vector<int> tmp;
 		graph.push_back(tmp);
+		graph_t.push_back(tmp);
 	}
 
 	for (int i = 0; i < m; ++i) 
@@ -78,7 +97,7 @@ void Graph::read_graph()
 		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
-		graph[y].push_back(x); // for undirected graphs
+		graph_t[y].push_back(x);
 	}
 
 	cout << endl;
@@ -88,14 +107,26 @@ void Graph::read_graph()
 void Graph::search_components() 
 {
 	used.assign(n, false);
-
-	for (int i = 0; i < n; ++i) 
+	for (int i = 0; i < n; ++i)
 	{
 		if (!used[i]) 
 		{
-			component.clear();
-			dfs_visit(i);
+			dfs_visit_1(i);
+		}
+	}
+
+	used.assign(n, false);
+	for (int i = 0; i < n; ++i)
+	{
+		int v = order[n - 1 - i];
+		if (!used[v]) 
+		{
+			dfs_visit_2(v);
+		}
+		if (!component.empty())
+		{
 			components.push_back(component);
+			component.clear();	
 		}
 	}
 }
@@ -114,7 +145,7 @@ void Graph::print_components()
 	cout << endl;
 }
 
-int main(int argc, char const *argv[]) 
+int main(int argc, char const *argv[])
 {
 	Graph g;
 	g.read_graph();

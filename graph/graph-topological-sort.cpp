@@ -25,7 +25,8 @@ test case
 5 6
 */
 
-class Graph {
+class Graph 
+{
 private:
 	int n, m;
 	vector< vector<int> > graph;
@@ -42,17 +43,32 @@ public:
 
 Graph::Graph(): n(0), m(0) {}
 
-void Graph::read_graph() {
+void Graph::dfs_visit(int v) 
+{
+	used[v] = true;	
+	for (int i = 0; i < graph[v].size(); ++i) 
+	{
+		int u = graph[v][i];
+		if (!used[u]) 
+		{
+			dfs_visit(u);
+		}
+	}
+	t_sort.push_back(v);
+}
+
+void Graph::read_graph() 
+{
 	cin >> n >> m;
 
-	used.resize(n);
-
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < m; ++i) 
+	{
 		vector<int> tmp;
 		graph.push_back(tmp);
 	}
 
-	for (int i = 0; i < m; ++i) {
+	for (int i = 0; i < m; ++i) 
+	{
 		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
@@ -63,34 +79,31 @@ void Graph::read_graph() {
 	getchar();
 }
 
-void Graph::dfs_visit(int v) {
-	used[v] = true;	
-	for (int i = 0; i < graph[v].size(); ++i) {
-		int u = graph[v][i];
-		if (!used[u]) {
-			dfs_visit(u);
-		}
-	}
-	t_sort.push_back(v);
-}
+void Graph::topological_sort() 
+{
+	used.assign(n, false);
 
-void Graph::topological_sort() {
-	for (int i = 0; i < n; ++i) {
-		if (!used[i]) {
+	for (int i = 0; i < n; ++i) 
+	{
+		if (!used[i]) 
+		{
 			dfs_visit(i);
 		}
 	}
 	reverse(t_sort.begin(), t_sort.end());
 }
 
-void Graph::print_topological_sort() {
-	for (int i = 0; i < t_sort.size(); ++i) {
+void Graph::print_topological_sort() 
+{
+	for (int i = 0; i < t_sort.size(); ++i) 
+	{
 		cout << t_sort[i] << ' ';
 	}
 	cout << endl;
 }
 
-int main(int argc, char const *argv[]) {
+int main(int argc, char const *argv[]) 
+{
 	Graph g;
 	g.read_graph();
 	g.topological_sort();
