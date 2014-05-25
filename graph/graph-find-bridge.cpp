@@ -29,6 +29,24 @@ test case
 10 11
 */
 
+/*
+12 14
+0 1
+0 2
+1 3
+2 3
+3 4
+4 5
+4 6
+5 7
+6 7
+7 8
+8 9
+8 10
+9 11
+10 11
+*/
+
 class Graph
 {
 private:
@@ -72,7 +90,6 @@ void Graph::debug()
 
 void Graph::dfs_visit(int v, int p)
 {
-	// debug();
 	used[v] = true;
 	t_in[v] = f_up[v] = ++dfs_timer;
 	for (int i = 0; i < graph[v].size(); ++i)
@@ -97,7 +114,6 @@ void Graph::dfs_visit(int v, int p)
 			}
 		}
 	}
-	debug();
 }
 
 void Graph::read_graph() 

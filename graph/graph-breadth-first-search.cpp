@@ -75,7 +75,7 @@ void Graph::debug()
 void Graph::read_graph() 
 {
 	cin >> n >> m;
-	for (int i = 0; i < m; ++i) 
+	for (int i = 0; i < n; ++i) 
 	{
 		vector<int> tmp;
 		graph.push_back(tmp);

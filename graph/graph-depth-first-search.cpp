@@ -86,7 +86,7 @@ void Graph::read_graph()
 {
 	cin >> n >> m;
 
-	for (int i = 0; i < m; ++i) 
+	for (int i = 0; i < n; ++i) 
 	{
 		vector<int> tmp;
 		graph.push_back(tmp);
@@ -106,6 +106,7 @@ void Graph::read_graph()
 
 void Graph::dfs() 
 {
+	dfs_timer = 0;
 	color.assign(n, 0);
 	parent.assign(n, -1);
 	t_in.assign(n, 0);
