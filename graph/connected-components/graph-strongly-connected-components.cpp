@@ -59,10 +59,8 @@ void Graph::dfs_visit_1(int v)
 	for (int i = 0; i < graph[v].size(); ++i)
 	{
 		int to = graph[v][i];
-		if (!used[to]) 
-		{
-			dfs_visit_1(to);
-		}
+		
+		if (!used[to]) dfs_visit_1(to);
 	}
 	order.push_back(v);
 }
@@ -74,10 +72,8 @@ void Graph::dfs_visit_2(int v)
 	for (int i = 0; i < graph_t[v].size(); ++i)
 	{
 		int to = graph_t[v][i];
-		if (!used[to]) 
-		{
-			dfs_visit_2(to);
-		}
+
+		if (!used[to]) dfs_visit_2(to);
 	}
 }
 
@@ -85,16 +81,16 @@ void Graph::read_graph()
 {
 	cin >> n >> m;
 
+	vector<int> tmp;
 	for (int i = 0; i < n; ++i) 
 	{
-		vector<int> tmp;
 		graph.push_back(tmp);
 		graph_t.push_back(tmp);
 	}
 
+	int x(0), y(0);
 	for (int i = 0; i < m; ++i) 
 	{
-		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
 		graph_t[y].push_back(x);
@@ -107,22 +103,17 @@ void Graph::read_graph()
 void Graph::search_components() 
 {
 	used.assign(n, false);
+
 	for (int i = 0; i < n; ++i)
-	{
-		if (!used[i]) 
-		{
-			dfs_visit_1(i);
-		}
-	}
+		if (!used[i]) dfs_visit_1(i);
 
 	used.assign(n, false);
 	for (int i = 0; i < n; ++i)
 	{
 		int v = order[n - 1 - i];
-		if (!used[v]) 
-		{
-			dfs_visit_2(v);
-		}
+
+		if (!used[v]) dfs_visit_2(v);
+
 		if (!component.empty())
 		{
 			components.push_back(component);
@@ -136,12 +127,13 @@ void Graph::print_components()
 	for (int i = 0; i < components.size(); ++i) 
 	{
 		cout << "Component #" << (i + 1) << ": ";
+
 		for (int j = 0; j < components[i].size(); ++j) 
-		{
 			cout << components[i][j] << ' ';
-		}
+
 		cout << endl << endl;
 	}
+
 	cout << endl;
 }
 

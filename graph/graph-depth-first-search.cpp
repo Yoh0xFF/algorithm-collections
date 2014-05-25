@@ -86,15 +86,12 @@ void Graph::read_graph()
 {
 	cin >> n >> m;
 
-	for (int i = 0; i < n; ++i) 
-	{
-		vector<int> tmp;
-		graph.push_back(tmp);
-	}
+	vector<int> tmp;
+	for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
+	int x(0), y(0);
 	for (int i = 0; i < m; ++i) 
 	{
-		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
 		// graph[y].push_back(x); // for undirected graphs
@@ -114,10 +111,8 @@ void Graph::dfs()
 
 	for (int i = 0; i < n; ++i) 
 	{
-		if (color[i] == 0) 
-		{
-			dfs_visit(i);
-		}
+		if (color[i] == 0) dfs_visit(i);
+
 		debug();
 	}
 }

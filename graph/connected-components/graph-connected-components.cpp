@@ -56,10 +56,8 @@ void Graph::dfs_visit(int v)
 	for (int i = 0; i < graph[v].size(); ++i) 
 	{
 		int u = graph[v][i];
-		if (!used[u]) 
-		{
-			dfs_visit(u);
-		}
+		
+		if (!used[u]) dfs_visit(u);
 	}
 }
 
@@ -67,15 +65,12 @@ void Graph::read_graph()
 {
 	cin >> n >> m;
 
-	for (int i = 0; i < n; ++i) 
-	{
-		vector<int> tmp;
-		graph.push_back(tmp);
-	}
+	vector<int> tmp;
+	for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
+	int x(0), y(0);
 	for (int i = 0; i < m; ++i) 
 	{
-		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
 		graph[y].push_back(x); // for undirected graphs
@@ -108,12 +103,13 @@ void Graph::print_components()
 	for (int i = 0; i < components.size(); ++i) 
 	{
 		cout << "Component #" << (i + 1) << ": ";
+
 		for (int j = 0; j < components[i].size(); ++j) 
-		{
 			cout << components[i][j] << ' ';
-		}
+
 		cout << endl << endl;
 	}
+
 	cout << endl;
 }
 

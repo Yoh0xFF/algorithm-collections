@@ -75,15 +75,13 @@ void Graph::debug()
 void Graph::read_graph() 
 {
 	cin >> n >> m;
-	for (int i = 0; i < n; ++i) 
-	{
-		vector<int> tmp;
-		graph.push_back(tmp);
-	}
+	
+	vector<int> tmp;
+	for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
+	int x(0), y(0);
 	for (int i = 0; i < m; ++i) 
 	{
-		int x(0), y(0);
 		cin >> x >> y;
 		graph[x].push_back(y);
 		graph[y].push_back(x); // for undirected graphs
@@ -112,6 +110,7 @@ void Graph::bfs(int s)
 		for (size_t i = 0; i < graph[v].size(); ++i) 
 		{
 			int to = graph[v][i];
+
 			if (!used[to]) 
 			{
 				q.push(to);
@@ -126,24 +125,22 @@ void Graph::bfs(int s)
 void Graph::print_shortest_path(int to) 
 {
 	if (!used[to]) 
-	{
 		cout << "No path \n";
-	} else 
+	else 
 	{
 		vector<int> path;
+		
 		for (int v = to; v != -1; v = parent[v]) 
-		{
 			path.push_back(v);
-		}
+
 		reverse(path.begin(), path.end());
+		
 		for (size_t i = 0; i < path.size(); ++i) 
 		{
-			if (i > 0) 
-			{
-				cout << ',';
-			}
+			if (i > 0) cout << ',';
 			cout << path[i];
 		}
+		
 		cout << endl;
 	}
 }
