@@ -46,19 +46,19 @@ void Graph::debug()
 {
 	cout << "--- color" << endl;
 	for (int i = 0; i < color.size(); ++i) cout << color[i] << ' ';
-		cout << endl;
+	cout << endl;
 
 	cout << "--- parent" << endl;
 	for (int i = 0; i < parent.size(); ++i) cout << parent[i] << ' ';
-		cout << endl;
+	cout << endl;
 
 	cout << "--- t_in" << endl;
 	for (int i = 0; i < t_in.size(); ++i) cout << t_in[i] << ' ';
-		cout << endl;
+	cout << endl;
 
 	cout << "--- t_out" << endl;
 	for (int i = 0; i < t_out.size(); ++i) cout << t_out[i] << ' ';
-		cout << endl << endl;
+	cout << endl << endl;
 	
 	getchar();
 }
