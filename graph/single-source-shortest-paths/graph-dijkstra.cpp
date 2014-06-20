@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <set>
 #include <cstdio>
 #include <algorithm>
 #include <utility> 
@@ -7,7 +8,12 @@
 using namespace std;
 
 /*
+witout set
 O(n^2 + m)
+
+with set (can be replaced with priority_queue)
+O(m*log(n))
+
 n - number of vertex
 m - number of edges
 */
@@ -42,7 +48,8 @@ private:
 public:
 	Graph();
 	void read_graph();
-	void dijkstra();
+	void dijkstra(int s);
+	void dijkstra_set(int s);
 	void print_shortest_path(int to);
 	void print_all_shortest_path();
 };
@@ -57,10 +64,6 @@ void Graph::debug()
 
 	cout << "--- parent" << endl;
 	for (int i = 0; i < p.size(); ++i) cout << p[i] << ' ';
-	cout << endl;
-
-	cout << "--- used" << endl;
-	for (int i = 0; i < u.size(); ++i) cout << u[i] << ' ';
 	cout << endl;
 
 	getchar();
@@ -85,13 +88,13 @@ void Graph::read_graph()
 	getchar();
 }
 
-void Graph::dijkstra()
+void Graph::dijkstra(int s)
 {
 	u.assign(n, false);
 	d.assign(n, INF);
 	p.assign(n, -1);
 
-	d[0] = 0;
+	d[s] = 0;
 	for (int i = 0; i < n; ++i)
 	{
 		int v = -1;
@@ -111,6 +114,39 @@ void Graph::dijkstra()
 			{
 				d[to] = d[v] + len;
 				p[to] = v;
+			}
+		}
+
+		debug();
+	}
+
+	debug();
+}
+
+void Graph::dijkstra_set(int s)
+{
+	d.assign(n, INF);
+	p.assign(n, -1);
+
+	d[s] = 0;
+	set< pair<int, int> > q;
+	q.insert(make_pair(d[s], s));
+	
+	while (!q.empty())
+	{
+		int v = q.begin()->second;
+		q.erase(q.begin());
+
+		for (int i = 0; i < graph[v].size(); ++i)
+		{
+			int to = graph[v][i].first, len = graph[v][i].second;
+
+			if (d[v] + len < d[to])
+			{
+				q.erase(make_pair(d[to], to));
+				d[to] = d[v] + len;
+				p[to] = v;
+				q.insert(make_pair(d[to], to));
 			}
 		}
 
@@ -149,7 +185,8 @@ int main(int argc, char const *argv[])
 {
 	Graph g;
 	g.read_graph();
-	g.dijkstra();
+	g.dijkstra(0);
+	// g.dijkstra_set(0);
 	g.print_all_shortest_path();
 
 	return 0;
