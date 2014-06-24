@@ -51,7 +51,7 @@ private:
 public:
 	Graph();
 	void read_graph();
-	void bellman_ford(int s);
+	bool bellman_ford(int s);
 	void print_shortest_path(int to);
 	void print_all_shortest_path();
 };
@@ -96,7 +96,7 @@ void Graph::read_graph()
 	getchar();
 }
 
-void Graph::bellman_ford(int s)
+bool Graph::bellman_ford(int s)
 {
 	d.assign(n, INF);
 	p.assign(n, -1);
@@ -110,13 +110,20 @@ void Graph::bellman_ford(int s)
 			{
 				if (d[e[j].a] + e[j].len < d[e[j].b])
 				{
-					d[e[j].b] =d[e[j].a] + e[j].len;
-					p[e[j].b] = e[j].a;	
+					d[e[j].b] = d[e[j].a] + e[j].len;
+					p[e[j].b] = e[j].a;
 				}
 			}
 		}
 	}
+
+	for (int j = 0; j < m; ++j)
+		if (d[e[j].a] + e[j].len < d[e[j].b])
+			return false;
+
 	debug();
+
+	return true;
 }
 
 void Graph::print_shortest_path(int to) 
@@ -133,6 +140,8 @@ void Graph::print_shortest_path(int to)
 
 void Graph::print_all_shortest_path()
 {
+	if (d.empty()) return;
+
 	for (int i = 0; i < n; ++i) 
 	{
 		cout << "from: " << 0 
@@ -148,8 +157,10 @@ int main(int argc, char const *argv[])
 {
 	Graph g;
 	g.read_graph();
-	g.bellman_ford(0);
-	g.print_all_shortest_path();
+	if (g.bellman_ford(0))
+		g.print_all_shortest_path();
+	else
+		cout << "Contains negative cycle \n";
 
 	return 0;
 }

@@ -116,8 +116,6 @@ void Graph::dijkstra(int s)
 				p[to] = v;
 			}
 		}
-
-		debug();
 	}
 
 	debug();
@@ -149,8 +147,6 @@ void Graph::dijkstra_set(int s)
 				q.insert(make_pair(d[to], to));
 			}
 		}
-
-		debug();
 	}
 
 	debug();
@@ -170,6 +166,8 @@ void Graph::print_shortest_path(int to)
 
 void Graph::print_all_shortest_path()
 {
+	if (d.empty()) return;
+
 	for (int i = 0; i < n; ++i) 
 	{
 		cout << "from: " << 0 

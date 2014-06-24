@@ -139,6 +139,8 @@ void Graph::print_shortest_path(int to)
 
 void Graph::print_all_shortest_path()
 {
+	if (d.empty()) return;
+
 	for (int i = 0; i < n; ++i) 
 	{
 		cout << "from: " << 0 
