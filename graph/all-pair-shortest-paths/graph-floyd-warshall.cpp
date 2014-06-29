@@ -7,6 +7,15 @@
 
 using namespace std;
 
+/*
+O(n^3)
+
+n - number of vertex
+m - number of edges
+
+Works only in case, when graph doesn't contains negative-weight cycle.
+*/
+
 /* test case
 
 5 10
