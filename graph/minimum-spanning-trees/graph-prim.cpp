@@ -6,6 +6,12 @@
 
 using namespace std;
 
+/*
+O(m * log(n))
+n - number of vertex
+m - number of edges
+*/
+
 /* test case
 
 9 14
@@ -21,7 +27,7 @@ using namespace std;
 4 6 7
 4 7 6
 5 8 10
-6 7 2
+6 7 1
 7 8 2
 
 5 8
