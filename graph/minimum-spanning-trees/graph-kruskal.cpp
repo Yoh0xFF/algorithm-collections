@@ -9,6 +9,9 @@ using namespace std;
 
 /*
 kruskal_mst - O(m * log(n) + n^2)
+
+kruskal_mst_dsu - O(m * log(n))
+
 n - number of vertex
 m - number of edges
 */
@@ -43,8 +46,46 @@ m - number of edges
 
 */
 
-const int INF = 1000000000;
+const int INF = 1000000;
 
+// disjoint set union implementation
+class DSU
+{
+private:
+	int parent[INF];
+	int rank[INF];
+public:
+	void make_set(int v);
+	int find_set(int v);
+	void union_sets(int a, int b);
+};
+
+void DSU::make_set(int v) 
+{
+	parent[v] = v;
+	rank[v] = 0;
+}
+
+int DSU::find_set(int v) 
+{
+	if (v == parent[v]) return v;
+	return parent[v] = find_set(parent[v]);
+}
+
+void DSU::union_sets(int a, int b) 
+{
+	a = find_set(a);
+	b = find_set(b);
+
+	if (a != b) 
+	{
+		if (rank[a] < rank[b]) swap(a, b);
+		parent[b] = a;
+		if (rank[a] == rank[b]) ++rank[a];
+	}
+}
+
+// kruskal algorithm implementation
 class Graph
 {
 private:
@@ -55,7 +96,8 @@ private:
 public:
 	Graph();
 	void read_graph();
-	void kruskal_mst();
+	int kruskal_mst();
+	int kruskal_mst_dsu();
 	void print_mst();
 };
 
@@ -82,13 +124,15 @@ void Graph::read_graph()
 	getchar();
 }
 
-void Graph::kruskal_mst()
+int Graph::kruskal_mst()
 {
+	result.clear();
 	sort(edge_set.begin(), edge_set.end());
 
 	vector<int> tree(n);
 	for (int i = 0; i < n; ++i) tree[i] = i;
 
+	int cost(0);
 	for (int i = 0; i < m; ++i)
 	{
 		int a = edge_set[i].second.first,
@@ -97,6 +141,7 @@ void Graph::kruskal_mst()
 
 		if (tree[a] != tree[b])
 		{
+			cost += len;
 			result.push_back(make_pair(make_pair(a, b), len));
 
 			int old_t = tree[a], new_t = tree[b];
@@ -105,6 +150,34 @@ void Graph::kruskal_mst()
 				if (tree[j] == old_t) tree[j] = new_t;
 		}
 	}
+
+	return cost;
+}
+
+int Graph::kruskal_mst_dsu()
+{
+	result.clear();
+	sort(edge_set.begin(), edge_set.end());
+
+	DSU dsu;
+	for (int i = 0; i < n; ++i) dsu.make_set(i);
+
+	int cost(0);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = edge_set[i].second.first,
+			b = edge_set[i].second.second,
+			len = edge_set[i].first;
+
+		if (dsu.find_set(a) != dsu.find_set(b))
+		{
+			cost += len;
+			result.push_back(make_pair(make_pair(a, b), len));
+			dsu.union_sets(a, b);
+		}
+	}
+
+	return cost;
 }
 
 void Graph::print_mst() 
@@ -112,13 +185,19 @@ void Graph::print_mst()
 	sort(result.begin(), result.end());
 	for (int i = 0; i < result.size(); ++i)
 		cout << '(' << result[i].first.first << ',' << result[i].first.second << ") " << result[i].second << endl;
+	cout << endl;
 }
 
 int main(int argc, char const *argv[])
 {
 	Graph g;
 	g.read_graph();
-	g.kruskal_mst();
+	
+	cout << "cost: " << g.kruskal_mst() << endl;
 	g.print_mst();
+
+	cout << "cost: " << g.kruskal_mst_dsu() << endl;
+	g.print_mst();
+	
 	return 0;
 }
