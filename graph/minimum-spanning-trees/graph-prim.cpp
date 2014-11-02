@@ -47,88 +47,88 @@ const int INF = 1000000000;
 class Graph
 {
 private:
-	int n, m;
-	vector< vector< pair<int, int> > > graph;
-	vector<int> p, k;
-	vector<bool> u;
+    int n, m;
+    vector< vector< pair<int, int> > > graph;
+    vector<int> p, k;
+    vector<bool> u;
 public:
-	Graph();
-	void read_graph();
-	void prim_mst(int s);
-	void print_mst();
+    Graph();
+    void read_graph();
+    void prim_mst(int s);
+    void print_mst();
 };
 
 Graph::Graph(): n(0), m(0) {}
 
 void Graph::read_graph() 
 {
-	cin >> n >> m;
+    cin >> n >> m;
 
-	vector< pair<int, int> > tmp;
-	for (int i = 0; i < n; ++i) graph.push_back(tmp);
+    vector< pair<int, int> > tmp;
+    for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
-	int x(0), y(0), d(0);
-	for (int i = 0; i < m; ++i) 
-	{
-		cin >> x >> y >> d;
-		graph[x].push_back(make_pair(y, d));
-		graph[y].push_back(make_pair(x, d)); // for undirected graphs
-	}
+    int x(0), y(0), d(0);
+    for (int i = 0; i < m; ++i) 
+    {
+        cin >> x >> y >> d;
+        graph[x].push_back(make_pair(y, d));
+        graph[y].push_back(make_pair(x, d)); // for undirected graphs
+    }
 
-	cout << endl;
-	getchar();
+    cout << endl;
+    getchar();
 }
 
 void Graph::prim_mst(int s) 
 {
-	p.assign(n, -1);
-	k.assign(n, INF);
-	u.assign(n, false);
+    p.assign(n, -1);
+    k.assign(n, INF);
+    u.assign(n, false);
 
-	k[s] = 0;
-	
-	set< pair<int, int> > q;
-	q.insert(make_pair(k[s], s));
+    k[s] = 0;
+    
+    set< pair<int, int> > q;
+    q.insert(make_pair(k[s], s));
 
-	while (!q.empty())
-	{
-		int v = q.begin()->second;
-		q.erase(q.begin());
-		
-		u[v] = true;
+    while (!q.empty())
+    {
+        int v = q.begin()->second;
+        q.erase(q.begin());
+        
+        u[v] = true;
 
-		for (int i = 0; i < graph[v].size(); ++i) 
-		{
-			int to = graph[v][i].first, len = graph[v][i].second;
+        for (int i = 0; i < graph[v].size(); ++i) 
+        {
+            int to = graph[v][i].first, len = graph[v][i].second;
 
-			if (!u[to] && len < k[to])
-			{
-				q.erase(make_pair(k[to], to));
-				p[to] = v;
-				k[to] = len;
-				q.insert(make_pair(k[to], to));
-			}
-		}
-	}
+            if (!u[to] && len < k[to])
+            {
+                q.erase(make_pair(k[to], to));
+                p[to] = v;
+                k[to] = len;
+                q.insert(make_pair(k[to], to));
+            }
+        }
+    }
 }
 
 void Graph::print_mst() 
 {
-	for (int v = 0; v < n; ++v)
-		cout << '(' 
-			<< p[v] 
-			<< ',' 
-			<< v 
-			<< ") " 
-			<< k[v] 
-			<< endl;
+    for (int v = 0; v < n; ++v)
+        cout << '(' 
+            << p[v] 
+            << ',' 
+            << v 
+            << ") " 
+            << k[v] 
+            << endl;
 }
 
 int main(int argc, char const *argv[])
 {
-	Graph g;
-	g.read_graph();
-	g.prim_mst(0);
-	g.print_mst();
-	return 0;
+    Graph g;
+    g.read_graph();
+    g.prim_mst(0);
+    g.print_mst();
+    return 0;
 }

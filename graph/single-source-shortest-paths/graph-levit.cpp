@@ -37,127 +37,127 @@ const int INF = 1000000000;
 class Graph 
 {
 private:
-	int n, m;
-	vector< vector< pair<int, int> > > graph;
-	vector<int> d, p, id;
+    int n, m;
+    vector< vector< pair<int, int> > > graph;
+    vector<int> d, p, id;
 
-	void debug();
+    void debug();
 public:
-	Graph();
-	void read_graph();
-	void levit(int s);
-	void print_shortest_path(int to);
-	void print_all_shortest_path();
+    Graph();
+    void read_graph();
+    void levit(int s);
+    void print_shortest_path(int to);
+    void print_all_shortest_path();
 };
 
 Graph::Graph(): n(0), m(0) {}
 
 void Graph::debug() 
 {
-	cout << "--- distance" << endl;
-	for (int i = 0; i < d.size(); ++i) cout << d[i] << ' ';
-	cout << endl;
+    cout << "--- distance" << endl;
+    for (int i = 0; i < d.size(); ++i) cout << d[i] << ' ';
+    cout << endl;
 
-	cout << "--- parent" << endl;
-	for (int i = 0; i < p.size(); ++i) cout << p[i] << ' ';
-	cout << endl;
+    cout << "--- parent" << endl;
+    for (int i = 0; i < p.size(); ++i) cout << p[i] << ' ';
+    cout << endl;
 
-	getchar();
+    getchar();
 }
 
 void Graph::read_graph() 
 {
-	cin >> n >> m;
+    cin >> n >> m;
 
-	vector< pair<int, int> > tmp;
-	for (int i = 0; i < n; ++i) graph.push_back(tmp);
+    vector< pair<int, int> > tmp;
+    for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
-	int x(0), y(0), d(0);
-	for (int i = 0; i < m; ++i) 
-	{
-		cin >> x >> y >> d;
-		graph[x].push_back(make_pair(y, d));
-		// graph[y].push_back(make_pair(x, d)); // for undirected graphs
-	}
+    int x(0), y(0), d(0);
+    for (int i = 0; i < m; ++i) 
+    {
+        cin >> x >> y >> d;
+        graph[x].push_back(make_pair(y, d));
+        // graph[y].push_back(make_pair(x, d)); // for undirected graphs
+    }
 
-	cout << endl;
-	getchar();
+    cout << endl;
+    getchar();
 }
 
 void Graph::levit(int s)
 {
-	d.assign(n, INF);
-	p.assign(n, -1);
-	id.assign(n, 2);
-	
-	d[s] = 0;
-	id[s] = 1;
-	
-	deque<int> q;
-	q.push_back(s);
-	
-	while (!q.empty())
-	{
-		int v = q.front();
-		q.pop_front();
-		id[v] = 0;
+    d.assign(n, INF);
+    p.assign(n, -1);
+    id.assign(n, 2);
+    
+    d[s] = 0;
+    id[s] = 1;
+    
+    deque<int> q;
+    q.push_back(s);
+    
+    while (!q.empty())
+    {
+        int v = q.front();
+        q.pop_front();
+        id[v] = 0;
 
-		for (int i = 0; i < graph[v].size(); ++i)
-		{
-			int to = graph[v][i].first, len = graph[v][i].second;
+        for (int i = 0; i < graph[v].size(); ++i)
+        {
+            int to = graph[v][i].first, len = graph[v][i].second;
 
-			if (d[v] + len < d[to])
-			{
-				d[to] = d[v] + len;
-				p[to] = v;
+            if (d[v] + len < d[to])
+            {
+                d[to] = d[v] + len;
+                p[to] = v;
 
-				if (id[to] == 2) q.push_back(to);
+                if (id[to] == 2) q.push_back(to);
 
-				if (id[to] == 0)
-				{
-					q.push_front(to);
-					id[to] = 1;
-				}
-			}
-		}
-	}
+                if (id[to] == 0)
+                {
+                    q.push_front(to);
+                    id[to] = 1;
+                }
+            }
+        }
+    }
 
-	debug();
+    debug();
 }
 
 void Graph::print_shortest_path(int to) 
 {
-	vector<int> path;
+    vector<int> path;
 
-	for (int v = to; v != -1; v = p[v]) path.push_back(v);
+    for (int v = to; v != -1; v = p[v]) path.push_back(v);
 
-	reverse(path.begin(), path.end());
+    reverse(path.begin(), path.end());
 
-	for (int i = 0; i < path.size(); ++i) cout << path[i] << ' ';
-	cout << endl;
+    for (int i = 0; i < path.size(); ++i) cout << path[i] << ' ';
+    cout << endl;
 }
 
 void Graph::print_all_shortest_path()
 {
-	if (d.empty()) return;
+    if (d.empty()) return;
 
-	for (int i = 0; i < n; ++i) 
-	{
-		cout << "from: " << 0 
-			<< " to: " << i 
-			<< " distance: " << d[i] 
-			<< endl;
+    for (int i = 0; i < n; ++i) 
+    {
+        cout << "from: " << 0 
+            << " to: " << i 
+            << " distance: " << d[i] 
+            << endl;
 
-		this->print_shortest_path(i);
-	}
+        this->print_shortest_path(i);
+    }
 }
 
 int main(int argc, char const *argv[])
 {
-	Graph g;
-	g.read_graph();
-	g.levit(0);
-	g.print_all_shortest_path();
+    Graph g;
+    g.read_graph();
+    g.levit(0);
+    g.print_all_shortest_path();
 
-	return 0;
+    return 0;
 }

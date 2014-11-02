@@ -39,153 +39,153 @@ const int INF = 1000000000;
 class Graph 
 {
 private:
-	int n, m;
-	vector< vector< pair<int, int> > > graph;
-	vector<int> d, p;
-	vector<bool> u;
+    int n, m;
+    vector< vector< pair<int, int> > > graph;
+    vector<int> d, p;
+    vector<bool> u;
 
-	void debug();
+    void debug();
 public:
-	Graph();
-	void read_graph();
-	void dijkstra(int s);
-	void dijkstra_set(int s);
-	void print_shortest_path(int to);
-	void print_all_shortest_path();
+    Graph();
+    void read_graph();
+    void dijkstra(int s);
+    void dijkstra_set(int s);
+    void print_shortest_path(int to);
+    void print_all_shortest_path();
 };
 
 Graph::Graph(): n(0), m(0) {}
 
 void Graph::debug() 
 {
-	cout << "--- distance" << endl;
-	for (int i = 0; i < d.size(); ++i) cout << d[i] << ' ';
-	cout << endl;
+    cout << "--- distance" << endl;
+    for (int i = 0; i < d.size(); ++i) cout << d[i] << ' ';
+    cout << endl;
 
-	cout << "--- parent" << endl;
-	for (int i = 0; i < p.size(); ++i) cout << p[i] << ' ';
-	cout << endl;
+    cout << "--- parent" << endl;
+    for (int i = 0; i < p.size(); ++i) cout << p[i] << ' ';
+    cout << endl;
 
-	getchar();
+    getchar();
 }
 
 void Graph::read_graph() 
 {
-	cin >> n >> m;
+    cin >> n >> m;
 
-	vector< pair<int, int> > tmp;
-	for (int i = 0; i < n; ++i) graph.push_back(tmp);
+    vector< pair<int, int> > tmp;
+    for (int i = 0; i < n; ++i) graph.push_back(tmp);
 
-	int x(0), y(0), d(0);
-	for (int i = 0; i < m; ++i) 
-	{
-		cin >> x >> y >> d;
-		graph[x].push_back(make_pair(y, d));
-		// graph[y].push_back(make_pair(x, d)); // for undirected graphs
-	}
+    int x(0), y(0), d(0);
+    for (int i = 0; i < m; ++i) 
+    {
+        cin >> x >> y >> d;
+        graph[x].push_back(make_pair(y, d));
+        // graph[y].push_back(make_pair(x, d)); // for undirected graphs
+    }
 
-	cout << endl;
-	getchar();
+    cout << endl;
+    getchar();
 }
 
 void Graph::dijkstra(int s)
 {
-	u.assign(n, false);
-	d.assign(n, INF);
-	p.assign(n, -1);
+    u.assign(n, false);
+    d.assign(n, INF);
+    p.assign(n, -1);
 
-	d[s] = 0;
-	for (int i = 0; i < n; ++i)
-	{
-		int v = -1;
-		for (int j = 0; j < n; ++j)
-			if (!u[j] && (v == -1 || d[j] < d[v]))
-				v = j;
-		
-		if (d[v] == INF) break;
+    d[s] = 0;
+    for (int i = 0; i < n; ++i)
+    {
+        int v = -1;
+        for (int j = 0; j < n; ++j)
+            if (!u[j] && (v == -1 || d[j] < d[v]))
+                v = j;
+        
+        if (d[v] == INF) break;
 
-		u[v] = true;
+        u[v] = true;
 
-		for (int j = 0; j < graph[v].size(); ++j) 
-		{
-			int to = graph[v][j].first, len = graph[v][j].second;
+        for (int j = 0; j < graph[v].size(); ++j) 
+        {
+            int to = graph[v][j].first, len = graph[v][j].second;
 
-			if (d[v] + len < d[to])
-			{
-				d[to] = d[v] + len;
-				p[to] = v;
-			}
-		}
-	}
+            if (d[v] + len < d[to])
+            {
+                d[to] = d[v] + len;
+                p[to] = v;
+            }
+        }
+    }
 
-	debug();
+    debug();
 }
 
 void Graph::dijkstra_set(int s)
 {
-	d.assign(n, INF);
-	p.assign(n, -1);
+    d.assign(n, INF);
+    p.assign(n, -1);
 
-	d[s] = 0;
-	set< pair<int, int> > q;
-	q.insert(make_pair(d[s], s));
-	
-	while (!q.empty())
-	{
-		int v = q.begin()->second;
-		q.erase(q.begin());
+    d[s] = 0;
+    set< pair<int, int> > q;
+    q.insert(make_pair(d[s], s));
+    
+    while (!q.empty())
+    {
+        int v = q.begin()->second;
+        q.erase(q.begin());
 
-		for (int i = 0; i < graph[v].size(); ++i)
-		{
-			int to = graph[v][i].first, len = graph[v][i].second;
+        for (int i = 0; i < graph[v].size(); ++i)
+        {
+            int to = graph[v][i].first, len = graph[v][i].second;
 
-			if (d[v] + len < d[to])
-			{
-				q.erase(make_pair(d[to], to));
-				d[to] = d[v] + len;
-				p[to] = v;
-				q.insert(make_pair(d[to], to));
-			}
-		}
-	}
+            if (d[v] + len < d[to])
+            {
+                q.erase(make_pair(d[to], to));
+                d[to] = d[v] + len;
+                p[to] = v;
+                q.insert(make_pair(d[to], to));
+            }
+        }
+    }
 
-	debug();
+    debug();
 }
 
 void Graph::print_shortest_path(int to) 
 {
-	vector<int> path;
+    vector<int> path;
 
-	for (int v = to; v != -1; v = p[v]) path.push_back(v);
+    for (int v = to; v != -1; v = p[v]) path.push_back(v);
 
-	reverse(path.begin(), path.end());
+    reverse(path.begin(), path.end());
 
-	for (int i = 0; i < path.size(); ++i) cout << path[i] << ' ';
-	cout << endl;
+    for (int i = 0; i < path.size(); ++i) cout << path[i] << ' ';
+    cout << endl;
 }
 
 void Graph::print_all_shortest_path()
 {
-	if (d.empty()) return;
+    if (d.empty()) return;
 
-	for (int i = 0; i < n; ++i) 
-	{
-		cout << "from: " << 0 
-			<< " to: " << i 
-			<< " distance: " << d[i] 
-			<< endl;
+    for (int i = 0; i < n; ++i) 
+    {
+        cout << "from: " << 0 
+            << " to: " << i 
+            << " distance: " << d[i] 
+            << endl;
 
-		this->print_shortest_path(i);
-	}
+        this->print_shortest_path(i);
+    }
 }
 
 int main(int argc, char const *argv[])
 {
-	Graph g;
-	g.read_graph();
-	g.dijkstra(0);
-	// g.dijkstra_set(0);
-	g.print_all_shortest_path();
+    Graph g;
+    g.read_graph();
+    g.dijkstra(0);
+    // g.dijkstra_set(0);
+    g.print_all_shortest_path();
 
-	return 0;
+    return 0;
 }
